@@ -4,7 +4,8 @@
 		"dev": "bun run --watch src/index.ts",
 		"test": "bun test",
 		"start": "bun src/index.ts",
-		"build": "bun build ./src/index.ts --outdir ./dist --target bun"
+		"build": "bun build ./src/index.ts --outdir ./dist --target bun",
+		"deploy": "wrangler deploy src/index.ts --name indo-mock-api"
 	},
 	"dependencies": {
 		"@hono/swagger-ui": "^0.5.3",
