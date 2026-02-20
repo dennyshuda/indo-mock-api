@@ -2,6 +2,3 @@ name = "indo-mock-api"
 main = "src/index.ts"
 compatibility_date = "2024-01-01"
 minify = true
-
-[site]
-bucket = "" # Biarkan kosong jika tidak pakai static site
