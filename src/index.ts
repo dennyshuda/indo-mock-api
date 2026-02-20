@@ -40,6 +40,6 @@ app.use("*", logger());
 
 app.route("/v1", v1);
 
-app.get("/", (c) => c.text("Indo-Mock API is Running! 🇮🇩"));
+app.get("/", (c) => c.json({ message: "Indo-Mock API is Running! 🇮🇩" }));
 
 export default app;
