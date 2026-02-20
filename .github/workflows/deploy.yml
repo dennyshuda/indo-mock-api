@@ -12,10 +12,8 @@ jobs:
     steps:
       - name: Checkout Repository
       - uses: actions/checkout@v4
-
       - name: Install Dependencies
         run: bun install
-
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
