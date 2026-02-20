@@ -29,6 +29,14 @@ const openApiSpec = {
 				},
 			},
 		},
+		"/v1/generate/nik": {
+			get: {
+				summary: "Ambil NIK acak",
+				responses: {
+					200: { description: "Berhasil mengembalikan NIK" },
+				},
+			},
+		},
 	},
 };
 
