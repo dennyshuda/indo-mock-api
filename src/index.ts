@@ -7,6 +7,14 @@ import { rateLimiter } from "./middlewres/rate-limit";
 
 const app = new Hono();
 
+app.use(
+	"/v1/*",
+	cors({
+		origin: "*",
+		allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+	}),
+);
+
 app.onError((err, c) => {
 	console.error(`${err.message}`);
 
@@ -31,7 +39,6 @@ app.notFound((c) => {
 });
 
 app.use("*", rateLimiter);
-app.use("/api/*", cors());
 app.use("*", logger());
 
 export const openApiSpec = {
