@@ -1,8 +1,0 @@
-{
-	"first_names": ["Budi", "Siti", "Agus", "Lestari", "Eko", "Putri"],
-	"last_names": ["Santoso", "Wijaya", "Saputra", "Hidayat", "Kurniawan"],
-	"provinces": [
-		{ "id": "32", "name": "Jawa Barat" },
-		{ "id": "31", "name": "DKI Jakarta" }
-	]
-}
