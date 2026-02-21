@@ -7,6 +7,29 @@ import { rateLimiter } from "./middlewres/rate-limit";
 
 const app = new Hono();
 
+app.onError((err, c) => {
+	console.error(`${err.message}`);
+
+	return c.json(
+		{
+			status: "error",
+			message: "Terjadi kesalahan internal pada server.",
+			error_detail: process.env.NODE_ENV === "development" ? err.message : undefined,
+		},
+		500,
+	);
+});
+
+app.notFound((c) => {
+	return c.json(
+		{
+			status: "error",
+			message: "Endpoint tidak ditemukan. Cek dokumentasi di /docs",
+		},
+		404,
+	);
+});
+
 app.use("*", rateLimiter);
 app.use("/api/*", cors());
 app.use("*", logger());

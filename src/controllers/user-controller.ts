@@ -23,78 +23,92 @@ const createFakeUser = () => {
 };
 
 export const getUser = (c: Context) => {
-	const qty = parseInt(c.req.query("qty") || "1");
-	const filterGender = c.req.query("gender");
-	const filterJob = c.req.query("job");
-	const format = c.req.query("format") || "json";
+	try {
+		const qty = parseInt(c.req.query("qty") || "1");
+		const filterGender = c.req.query("gender");
+		const filterJob = c.req.query("job");
+		const format = c.req.query("format") || "json";
 
-	let selectedJob = filterJob;
+		if (isNaN(qty)) {
+			throw new Error("Parameter 'qty' harus berupa angka.");
+		}
 
-	if (filterJob) {
-		const found = datasets.jobs.find((j) => j.toLowerCase() === filterJob.toLowerCase());
+		let selectedJob = filterJob;
 
-		if (!found) {
+		if (filterJob) {
+			const found = datasets.jobs.find((j) => j.toLowerCase() === filterJob.toLowerCase());
+
+			if (!found) {
+				return c.json(
+					{
+						status: "error",
+						message: `Pekerjaan '${filterJob}' tidak tersedia.`,
+						available_jobs: datasets.jobs,
+					},
+					400,
+				);
+			}
+
+			selectedJob = found;
+		}
+
+		const allowedGenders = ["Laki-laki", "Perempuan"];
+		if (filterGender && !allowedGenders.includes(filterGender)) {
 			return c.json(
 				{
 					status: "error",
-					message: `Pekerjaan '${filterJob}' tidak tersedia.`,
-					available_jobs: datasets.jobs,
+					message: "Gender tidak valid. Pilih: Laki-laki atau Perempuan",
 				},
 				400,
 			);
 		}
 
-		selectedJob = found;
-	}
+		if (qty > 100) {
+			return c.json({ status: "error", message: "Maksimal 100 data per request" }, 400);
+		}
 
-	const allowedGenders = ["Laki-laki", "Perempuan"];
-	if (filterGender && !allowedGenders.includes(filterGender)) {
+		const users = Array.from({ length: qty }, () => {
+			let user = createFakeUser();
+
+			if (filterGender) {
+				user.gender = filterGender;
+				user.nik = generateFakeNIK();
+
+				user.full_name =
+					filterGender === "Laki-laki"
+						? `${getRandomItem(datasets.firstNamesMale)} ${getRandomItem(datasets.lastNames)}`
+						: `${getRandomItem(datasets.firstNamesFemale)} ${getRandomItem(datasets.lastNames)}`;
+			}
+
+			if (filterJob) {
+				user.job = filterJob;
+			}
+
+			return user;
+		});
+
+		if (format === "csv") {
+			const csvData = convertToCSV(users);
+
+			return c.body(csvData, 200, {
+				"Content-Type": "text/csv; charset=utf-8",
+				"Content-Disposition": 'attachment; filename="data_indofaker.csv"',
+			});
+		}
+
+		return c.json({
+			status: "success",
+			count: qty,
+			filters: { gender: filterGender, job: filterJob },
+			data: qty === 1 ? users[0] : users,
+		});
+	} catch (error: any) {
 		return c.json(
 			{
 				status: "error",
-				message: "Gender tidak valid. Pilih: Laki-laki atau Perempuan",
+				message: error.message,
 			},
 			400,
 		);
 	}
-
-	if (qty > 100) {
-		return c.json({ status: "error", message: "Maksimal 100 data per request" }, 400);
-	}
-
-	const users = Array.from({ length: qty }, () => {
-		let user = createFakeUser();
-
-		if (filterGender) {
-			user.gender = filterGender;
-			user.nik = generateFakeNIK();
-
-			user.full_name =
-				filterGender === "Laki-laki"
-					? `${getRandomItem(datasets.firstNamesMale)} ${getRandomItem(datasets.lastNames)}`
-					: `${getRandomItem(datasets.firstNamesFemale)} ${getRandomItem(datasets.lastNames)}`;
-		}
-
-		if (filterJob) {
-			user.job = filterJob;
-		}
-
-		return user;
-	});
-
-	if (format === "csv") {
-		const csvData = convertToCSV(users);
-
-		return c.body(csvData, 200, {
-			"Content-Type": "text/csv; charset=utf-8",
-			"Content-Disposition": 'attachment; filename="data_indofaker.csv"',
-		});
-	}
-
-	return c.json({
-		status: "success",
-		count: qty,
-		filters: { gender: filterGender, job: filterJob },
-		data: qty === 1 ? users[0] : users,
-	});
 };
