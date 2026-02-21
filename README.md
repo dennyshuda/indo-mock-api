@@ -1,71 +1,99 @@
-# 🇮🇩 Indo-Mock API
+# 🇮🇩 Indo Mock API
 
 [![Hono](https://img.shields.io/badge/Framework-Hono.js-flame?style=flat-square)](https://hono.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-**Indo-Mock API** adalah layanan API open-source sederhana yang menyediakan data palsu (_mock data_) khas Indonesia. Dibuat khusus untuk membantu developer lokal membangun prototipe aplikasi dengan data yang relevan (Nama Indonesia, Alamat, No HP, dll) tanpa harus bergantung pada data Barat.
+**Indo Mock API** adalah backend service berbasis **Hono.js** yang dirancang untuk menghasilkan data identitas palsu (fake data) khusus konteks Indonesia. Sangat berguna bagi developer lokal untuk melakukan _testing_ aplikasi, _database seeding_, atau _load testing_ dengan data yang realistis.
+
+---
 
 ## ✨ Fitur Utama
 
-- ⚡ **Ultra Fast**: Dibangun menggunakan Hono.js yang ringan dan cepat.
-- 🇮🇩 **Local Context**: Nama orang, alamat, dan nomor telepon yang sangat "Indonesia".
-- 🛠 **Developer Friendly**: Dokumentasi OpenAPI/Swagger terintegrasi.
-- 📦 **Extensible**: Mudah ditambah datanya melalui file JSON sederhana.
+- **Lokalitas Indonesia**: Nama, alamat, hingga pekerjaan disesuaikan dengan konteks Indonesia.
+- **Logika NIK Pintar**: Generate Nomor Induk Kependudukan (NIK)
+- **Bulk Generation**: Generate hingga 100 data dalam satu request menggunakan query parameter `qty`.
+- **Filtering Cerdas**: Filter berdasarkan `gender` dan `job` (Case-Insensitive).
+- **Export to CSV**: Download data langsung dalam format `.csv` yang rapi dan siap buka di Excel.
+- **API Key Security**: Dilengkapi middleware untuk mengamankan endpoint dari penggunaan tanpa izin.
+- **Interactive Documentation**: Dokumentasi API lengkap menggunakan **Swagger UI**.
 
-## 🚀 Cara Menjalankan di Lokal
+---
 
-### Prasyarat
+## 🚀 Teknologi yang Digunakan
 
-- [Node.js](https://nodejs.org/) (v18 atau lebih baru)
-- [Bun](https://bun.sh/) atau NPM
+- **Runtime**: [Bun](https://bun.sh/)
+- **Framework**: [Hono.js](https://hono.dev/)
+- **Documentation**: [Swagger UI](https://github.com/honojs/middleware/tree/main/packages/swagger-ui)
+- **Language**: TypeScript
 
-### Instalasi
+---
 
-1. Clone repositori ini:
+## 🛠️ Instalasi & Menjalankan
 
-```bash
-git clone [https://github.com/dennyshuda/indo-mock-api.git](https://github.com/dennyshuda/indo-mock-api.git)
-cd indo-mock-api
-```
+1. **Clone Repository**
 
-2. Install dependensi:
+   ```bash
+   git clone [https://github.com/github/indo-mock-api.git](https://github.com/username/indo-mock-api.git)
+   cd indofaker-api
+   ```
 
-```bash
-npm install
-```
+2. **Install Dependencies**
 
-3. Jalankan server pengembangan:
+   ```bash
+   npm install
 
-```bash
-npm run dev
-```
+   ```
 
-4. Buka `http://localhost:3000` di browser Anda.
+3. **Run Development Server**
+
+   ```bash
+   npm run dev
+   ```
+
+4. Server akan berjalan di http://localhost:3000
+
+## 📖 Dokumentasi API
+
+Anda dapat mengakses dokumentasi interaktif (Swagger) melalui:
+👉 http://localhost:3000/docs
 
 ## 📡 API Endpoints
 
-| Method | Endpoint               | Deskripsi                                            |
-| ------ | ---------------------- | ---------------------------------------------------- |
-| `GET`  | `/v1/user/random`      | Mendapatkan data user acak (Nama, Email, HP)         |
-| `GET`  | `/v1/region/provinces` | Daftar seluruh provinsi di Indonesia                 |
-| `GET`  | `/v1/generate/nik`     | Menghasilkan nomor NIK acak yang valid secara format |
+## 📊 Contoh Respon JSON
+
+```json
+{
+	"status": "success",
+	"data": {
+		"full_name": "Siti Lestari",
+		"gender": "Perempuan",
+		"nik": "3273016105950001",
+		"address": "Jl. Gajah Mada No. 12, Jakarta Barat",
+		"phone": "081298821234",
+		"email": "siti.lestari23@example.id",
+		"job": "Dokter"
+	}
+}
+```
+
+## 📡 API Endpoints
+
+`GET /v1/user`
+
+Mendapatkan data identitas acak.
+
+Query Parameters:
+| Parameter | Tipe | Deskripsi | Contoh |
+| :--- | :--- | :--- | :--- |
+| qty | Number | Jumlah data (Max 100) | ?qty=10 |
+| gender | String | Laki-laki / Perempuan | ?gender=Perempuan |
+| job | String | Filter pekerjaan | ?job=dokter |
+| format | String | json (default) / csv | ?format=csv |
 
 ## 🛠 Kontribusi
 
-Kami sangat menunggu kontribusi Anda! Anda bisa membantu dengan cara:
-
-- Menambahkan daftar nama baru di `data/names.json`.
-- Menambahkan daftar kota/kabupaten di `data/regions.json`.
-- Memperbaiki bug atau meningkatkan performa kode.
-
-**Cara Kontribusi:**
-
-1. Fork proyek ini.
-2. Buat branch fitur baru (`git checkout -b fitur/NamaFitur`).
-3. Commit perubahan Anda (`git commit -m 'Tambah data nama daerah'`).
-4. Push ke branch tersebut (`git push origin fitur/NamaFitur`).
-5. Buat Pull Request.
+Ingin menambah daftar nama daerah atau profesi baru? Silakan buat Pull Request! Kami sangat menghargai kontribusi untuk membuat data ini semakin akurat.
 
 ## 📄 Lisensi
 
