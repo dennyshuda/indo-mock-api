@@ -34,7 +34,7 @@
 1. **Clone Repository**
 
    ```bash
-   git clone [https://github.com/github/indo-mock-api.git](https://github.com/username/indo-mock-api.git)
+   git clone https://github.com/github/indo-mock-api.git
    cd indofaker-api
    ```
 
@@ -42,7 +42,6 @@
 
    ```bash
    npm install
-
    ```
 
 3. **Run Development Server**
@@ -56,7 +55,9 @@
 ## 📖 Dokumentasi API
 
 Anda dapat mengakses dokumentasi interaktif (Swagger) melalui:
-👉 http://localhost:3000/docs
+
+- 📍 Lokal: http://localhost:3000/docs
+- 🌐 Online: https://indo-mock-api.denycam9.workers.dev/docs
 
 ## 📡 API Endpoints
 
