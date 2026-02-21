@@ -39,14 +39,7 @@ export const getUser = (c: Context) => {
 			const found = datasets.jobs.find((j) => j.toLowerCase() === filterJob.toLowerCase());
 
 			if (!found) {
-				return c.json(
-					{
-						status: "error",
-						message: `Pekerjaan '${filterJob}' tidak tersedia.`,
-						available_jobs: datasets.jobs,
-					},
-					400,
-				);
+				throw new Error(`Pekerjaan '${filterJob}' tidak tersedia.`);
 			}
 
 			selectedJob = found;
@@ -54,17 +47,11 @@ export const getUser = (c: Context) => {
 
 		const allowedGenders = ["Laki-laki", "Perempuan"];
 		if (filterGender && !allowedGenders.includes(filterGender)) {
-			return c.json(
-				{
-					status: "error",
-					message: "Gender tidak valid. Pilih: Laki-laki atau Perempuan",
-				},
-				400,
-			);
+			throw new Error("Gender tidak valid. Pilih: Laki-laki atau Perempuan");
 		}
 
 		if (qty > 100) {
-			return c.json({ status: "error", message: "Maksimal 100 data per request" }, 400);
+			throw new Error("Maksimal 100 data per request");
 		}
 
 		const users = Array.from({ length: qty }, () => {
