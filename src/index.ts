@@ -3,9 +3,11 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import userRoute from "./routes/user";
+import { rateLimiter } from "./middlewres/rate-limit";
 
 const app = new Hono();
 
+app.use("*", rateLimiter);
 app.use("/api/*", cors());
 app.use("*", logger());
 
